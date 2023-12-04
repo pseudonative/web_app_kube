@@ -1,0 +1,30 @@
+name: WebApp CI/CD
+
+on:
+    push:
+        branches: [ staging-** ]
+    pull:
+        branches: [ staging-** ]
+
+jobs:
+    set_up_staging:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@4
+              with: 
+                ref: ${{ github.ref_name }}
+            - name: Write Branch to File
+              run: echo ${{ github.ref_name }} > BRANCH
+
+            - name: Archive
+              uses: actions/upload-artifact@v3
+              with:
+                name: branch
+                path: BRANCH
+            
+            - name: Set Display
+              id: display
+              run: |
+                echo "staging_output=Staging and Archiving Successful" >> $GITHUB_ENV
+                echo "${{ env.staging_output }}"
