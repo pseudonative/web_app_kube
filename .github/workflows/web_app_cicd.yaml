@@ -8,6 +8,11 @@ on:
 
 jobs:
     set_the_staging_branch:
+      permissions:
+          id-token: write
+          contents: read
+          pull-requests: write
+          statuses: write
       uses: pseudonative/reusable_work_flows/.github/workflows/auth_checkout_initial.yaml@main
       with:
         aws_region: 'us-east-1'
