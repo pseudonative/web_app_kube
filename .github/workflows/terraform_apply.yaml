@@ -28,6 +28,8 @@ jobs:
               id: apply 
               run: |
                 cd terraform/apply/production
+                pwd
+                ls -alt
                 terraform init
                 terraform apply -auto-approve plan.tfout
 
