@@ -68,14 +68,14 @@ module "eks" {
   version = "~> 19.0"
 
   cluster_name                   = local.name
-  cluster_version                = "1.28" 
+  cluster_version                = "1.28"
   cluster_endpoint_public_access = true
-  vpc_id          = var.vpc_id
-  subnet_ids      = var.private_subnets
+  vpc_id                         = var.vpc_id
+  subnet_ids                     = var.private_subnets
 
   # If you don't have a specific key pair, remove the key_name argument
   eks_managed_node_group_defaults = {
-    ami_type       = "AL2_x86_64"
+    ami_type = "AL2_x86_64"
   }
 
   tags = {
@@ -83,3 +83,28 @@ module "eks" {
     "Project"     = "web-app-kube"
   }
 }
+
+module "node_group_private" {
+  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+
+  name            = "private"
+  cluster_name    = module.eks.cluster_name
+  cluster_version = module.eks.cluster_version
+
+  subnet_ids = var.private_subnets
+
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  vpc_security_group_ids            = [module.eks.node_security_group_id]
+
+  max_size     = 3
+  min_size     = 1
+  desired_size = 2
+
+  instance_types = ["t3a.medium"]
+  capacity_type  = "ON_DEMAND"
+
+  labels = {
+    AccessSpecifier = "private"
+  }
+}
+
