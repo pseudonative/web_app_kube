@@ -14,7 +14,7 @@ provider "aws" {
   region = "us-east-1"
 
   assume_role {
-    role_arn = "arn:aws:iam::520291287938:role/ProdFullAccess"
+    role_arn     = "arn:aws:iam::520291287938:role/ProdFullAccess"
     session_name = "Terraform-ProdUpdate"
   }
 }
