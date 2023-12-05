@@ -51,4 +51,4 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: plan
-                path: terraform/apply/production
+                path: terraform/apply/production/plan.tfout
