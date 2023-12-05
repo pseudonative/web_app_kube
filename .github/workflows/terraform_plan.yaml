@@ -46,3 +46,9 @@ jobs:
                 stdout: ${{ steps.plan.outputs.stdout }}
                 stderr: ${{ steps.plan.outputs.stderr }}
                 stdout_or_stderr: ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
+
+            - name: Archive TF Plan
+              uses: actions/upload-artifact@v3
+              with:
+                name: plan
+                path: terraform/apply/production
