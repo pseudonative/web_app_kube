@@ -1,6 +1,6 @@
 
 locals {
-  name   = "webapp-kube-1-0-6"
+  name   = "webapp-kube"
   region = "us-east-1"
 
   vpc_cidr = "10.0.0.0/16"
@@ -8,7 +8,7 @@ locals {
 
   tags = {
     Example    = local.name
-    GithubRepo = "terraform-aws-vpc"
-    GithubOrg  = "terraform-aws-modules"
+    GithubRepo = "web_app_kube"
+    GithubOrg  = "pseudonative"
   }
 }
