@@ -17,7 +17,7 @@ jobs:
             - name: Plan from Composite Action
               uses: pseudonative/reusable_work_flows/compositAction@main
               with:
-                workflow_file: web_app_cicd.yaml
+                workflow_file: terraform_plan.yaml
                 artifact_name: plan
                 artifact_path: terraform/apply/production
                 aws_region: us-east-1
