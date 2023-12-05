@@ -29,7 +29,7 @@ jobs:
               run: |
                 cd terraform/apply/production
                 terraform init
-                terraform apply -auto-approve plan.out
+                terraform apply -auto-approve plan.tfout
 
             - name: Success on PR
               if: steps.apply.outcome == 'success'
