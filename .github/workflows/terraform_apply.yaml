@@ -27,9 +27,15 @@ jobs:
             - name: Terraform Apply 
               id: apply 
               run: |
+                pwd
+                sleep 20
+                ls -alt
+                sleep 20
                 cd terraform/apply/production
                 pwd
+                sleep 20
                 ls -alt
+                sleep 20
                 terraform init
                 terraform apply -auto-approve plan.tfout
 
