@@ -10,5 +10,6 @@ locals {
     Example    = local.name
     GithubRepo = "web_app_kube"
     GithubOrg  = "pseudonative"
+    Managed    = "Terraform"
   }
 }
