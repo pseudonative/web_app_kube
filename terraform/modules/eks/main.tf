@@ -79,7 +79,7 @@ module "eks" {
   }
 
   tags = {
-    "Environment" = "development"
-    "Project"     = "MyProject"
+    "Environment" = "Production"
+    "Project"     = "web-app-kube"
   }
 }
