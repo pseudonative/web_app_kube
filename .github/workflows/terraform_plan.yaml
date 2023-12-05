@@ -34,13 +34,14 @@ jobs:
                 terraform validate -no-color
                 terraform plan -no-color -out=plan.tfout \
                 && terraform show -no-color plan.tfout
+                pwd && ls -alt
 
-            - name: TF Plan to Github PR
-              if: success() && steps.plan.conclusion == 'success'
-              uses: pseudonative/reusable_work_flows/compositPlanOutPR@main
-              with: 
-                github_token: ${{ secrets.GITHUB_TOKEN }}
-                environment: production
-                stdout: ${{ steps.plan.outputs.stdout }}
-                stderr: ${{ steps.plan.outputs.stderr }}
-                stdout_or_stderr: ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
+            # - name: TF Plan to Github PR
+            #   if: success() && steps.plan.conclusion == 'success'
+            #   uses: pseudonative/reusable_work_flows/compositPlanOutPR@main
+            #   with: 
+            #     github_token: ${{ secrets.GITHUB_TOKEN }}
+            #     environment: production
+            #     stdout: ${{ steps.plan.outputs.stdout }}
+            #     stderr: ${{ steps.plan.outputs.stderr }}
+            #     stdout_or_stderr: ${{ steps.plan.outputs.stdout || steps.plan.outputs.stderr }}
