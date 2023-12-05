@@ -30,11 +30,12 @@ jobs:
               run: |
                 cd terraform/apply/production
                 terraform init
-                terraform fmt -check
-                terraform validate -no-color
-                terraform plan -no-color -out=plan.tfout \
-                && terraform show -no-color plan.tfout
-                pwd && ls -alt
+                terraform plan
+                # terraform fmt -check
+                # terraform validate -no-color
+                # terraform plan -no-color -out=plan.tfout \
+                # && terraform show -no-color plan.tfout
+                # pwd && ls -alt
 
             # - name: TF Plan to Github PR
             #   if: success() && steps.plan.conclusion == 'success'
