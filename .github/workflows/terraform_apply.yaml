@@ -1,0 +1,49 @@
+name: Terraform Apply
+
+on: 
+    issue_comment:
+        types: [ created ]
+
+jobs:
+    apply:
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+            statuses: write
+        runs-on: ubuntu-latest
+        if: github.event.issue.pull_request && contains(github.event.comment.body, '/lgtm_approve')
+        steps:
+            - name: Plan from Composite Action
+              uses: pseudonative/reusable_work_flows/compositAction@main
+              with:
+                workflow_file: web_app_cicd.yaml
+                artifact_name: plan
+                artifact_path: terraform/apply/production
+                aws_region: us-east-1
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                aws_oidc_assume_role: arn:aws:iam::520291287938:role/crom-github-actions-role
+
+            - name: Terraform Apply 
+              id: apply 
+              run: |
+                cd terraform/apply/production
+                terraform init
+                terraform apply -auto-approve plan.out
+
+            - name: Success on PR
+              if: steps.apply.outcome == 'success'
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    const issue_number = context.issue.number;
+                    const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
+                    github.rest.issue.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issue_number,
+                        body: message
+                    })
+
+              
+              
