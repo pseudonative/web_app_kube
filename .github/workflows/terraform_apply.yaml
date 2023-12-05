@@ -12,7 +12,7 @@ jobs:
             pull-requests: write
             statuses: write
         runs-on: ubuntu-latest
-        if: github.event.issue.pull_request && contains(github.event.comment.body, '/lgtm_approve')
+        if: github.event.issue.pull_request && contains(github.event.comment.body, '/lgtm_apply')
         steps:
             - name: Plan from Composite Action
               uses: pseudonative/reusable_work_flows/compositAction@main
@@ -50,15 +50,13 @@ jobs:
               if: steps.apply.outcome == 'success'
               uses: actions/github-script@v6
               with:
+                github-token: ${{ inputs.github_token }}
                 script: |
-                    const issue_number = context.issue.number;
-                    const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
-                    github.rest.issue.createComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        issue_number: issue_number,
-                        body: message
-                    })
-
-              
-              
+                  const issue_number = context.issue.number;
+                  const message = `<span style="color: green;"><strong>Terraform Apply has succeeded.</strong></span>`;
+                  github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue_number,
+                    body: message
+                  })
