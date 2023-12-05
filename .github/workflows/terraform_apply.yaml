@@ -14,6 +14,16 @@ jobs:
         runs-on: ubuntu-latest
         if: github.event.issue.pull_request && contains(github.event.comment.body, '/lgtm_approve')
         steps:
+            - name: Plan from Composite Action
+              uses: pseudonative/reusable_work_flows/compositAction@main
+              with:
+                workflow_file: web_app_cicd.yaml
+                artifact_name: branch
+                artifact_path: BRANCH
+                aws_region: us-east-1
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                aws_oidc_assume_role: arn:aws:iam::520291287938:role/crom-github-actions-role
+              
             - name: Download Plan Artifact
               id: download_artifact
               uses: dawidd6/action-download-artifact@v2
@@ -23,19 +33,6 @@ jobs:
                 workflow_conclusion: success
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 path: terraform/apply/production
-        
-            - name: Checkout Repo
-              id: checkout
-              uses: actions/checkout@v4
-              with:
-                ref: ${{ github.ref_name }}
-        
-            - name: Configure AWS Credentials
-              id: aws_creds
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                role-to-assume: arn:aws:iam::520291287938:role/crom-github-actions-role
-                aws-region: us-east-1
         
             - name: Set Up TF 
               uses: hashicorp/setup-terraform@v2
@@ -57,19 +54,19 @@ jobs:
                 # terraform init
                 # terraform apply -auto-approve plan.tfout
 
-            - name: Success on PR
-              if: steps.apply.outcome == 'success'
-              uses: actions/github-script@v6
-              with:
-                script: |
-                    const issue_number = context.issue.number;
-                    const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
-                    github.rest.issue.createComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        issue_number: issue_number,
-                        body: message
-                    })
+            # - name: Success on PR
+            #   if: steps.apply.outcome == 'success'
+            #   uses: actions/github-script@v6
+            #   with:
+            #     script: |
+            #         const issue_number = context.issue.number;
+            #         const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
+            #         github.rest.issue.createComment({
+            #             owner: context.repo.owner,
+            #             repo: context.repo.repo,
+            #             issue_number: issue_number,
+            #             body: message
+            #         })
 
               
               
