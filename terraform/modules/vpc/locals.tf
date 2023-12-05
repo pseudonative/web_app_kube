@@ -1,6 +1,6 @@
 
 locals {
-  name   = "webapp-kube-1-0-4"
+  name   = "webapp-kube-1-0-5"
   region = "us-east-1"
 
   vpc_cidr = "10.0.0.0/16"
