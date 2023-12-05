@@ -50,7 +50,7 @@ jobs:
               if: steps.apply.outcome == 'success'
               uses: actions/github-script@v6
               with:
-                github-token: ${{ inputs.github_token }}
+                github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
                   const issue_number = context.issue.number;
                   const message = `<span style="color: green;"><strong>Terraform Apply has succeeded.</strong></span>`;
