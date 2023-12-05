@@ -42,31 +42,23 @@ jobs:
             - name: Terraform Apply 
               id: apply 
               run: |
-                pwd
-                sleep 20
-                ls -alt
-                sleep 20
                 cd terraform/apply/production
-                pwd
-                sleep 20
-                ls -alt
-                sleep 20
-                # terraform init
-                # terraform apply -auto-approve plan.tfout
+                terraform init
+                terraform apply -auto-approve plan.tfout
 
-            # - name: Success on PR
-            #   if: steps.apply.outcome == 'success'
-            #   uses: actions/github-script@v6
-            #   with:
-            #     script: |
-            #         const issue_number = context.issue.number;
-            #         const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
-            #         github.rest.issue.createComment({
-            #             owner: context.repo.owner,
-            #             repo: context.repo.repo,
-            #             issue_number: issue_number,
-            #             body: message
-            #         })
+            - name: Success on PR
+              if: steps.apply.outcome == 'success'
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    const issue_number = context.issue.number;
+                    const message = `<span style="color: black;"><strong>Terraform Apply has succedded.</strong></span>`;
+                    github.rest.issue.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issue_number,
+                        body: message
+                    })
 
               
               
