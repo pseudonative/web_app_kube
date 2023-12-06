@@ -20,10 +20,10 @@ module "crom_rds" {
   providers = {
     aws = aws.productionuseast1
   }
-  
+
   db_username = "subotai"
-  db_password = "thefourwinds" 
+  db_password = "thefourwinds"
   vpc_id      = module.crom_vpc.vpc_id
-  subnet_ids  = module.crom_vpc.private_subnets
-  db_name = "tulsadoom"
+  subnet_ids  = module.crom_vpc.public_subnets
+  db_name     = "tulsadoom"
 }
