@@ -100,7 +100,8 @@ This repository contains Terraform code for creating and managing an AWS VPC inf
 
 ## Pre-requisites
 
-- AWS Account with necessary permissions.
+- AWS Account with necessary permissions. The cluster is created with assume rol prodfullaccess
+- profle has to be assumed to run Kubectl commands `alias prod='export AWS_PROFILE=prod'`
 - Terraform installed on your local machine.
 - Basic understanding of Terraform and AWS.
 
