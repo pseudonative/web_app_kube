@@ -112,3 +112,5 @@ This repository contains Terraform code for creating and managing an AWS VPC inf
 3. Initialize Terraform:
    ```sh
    terraform init
+
+
