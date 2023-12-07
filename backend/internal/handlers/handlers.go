@@ -10,43 +10,34 @@ import (
 	"github.com/pseudonative/web_app_kube/internal/models"
 )
 
-func CreateUser(db *sql.DB) gin.HandlerFunc {
+// CreateUserHandler handles the creation of a new user.
+func CreateUserHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user models.User
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		id, err := queries.CreateUser(db, user)
-		if err != nil {
+
+		if err := queries.CreateUser(db, user); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 			return
 		}
-		user.ID = id
-		c.JSON(http.StatusCreated, gin.H{"user": user})
+
+		c.JSON(http.StatusCreated, user)
 	}
 }
 
-func GetUsers(db *sql.DB) gin.HandlerFunc {
+// GetUserHandler handles fetching a user by their ID.
+func GetUserHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		users, err := queries.GetUsers(db)
+		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"users": users})
-	}
-}
 
-func GetUser(db *sql.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		idStr := c.Param("id")
-		id, err := strconv.Atoi(idStr)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
-			return
-		}
-		user, err := queries.GetUser(db, id)
+		user, err := queries.GetUserByID(db, id)
 		if err != nil {
 			if err == sql.ErrNoRows {
 				c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
@@ -55,43 +46,62 @@ func GetUser(db *sql.DB) gin.HandlerFunc {
 			}
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"user": user})
+
+		c.JSON(http.StatusOK, user)
 	}
 }
 
-func UpdateUser(db *sql.DB) gin.HandlerFunc {
+// GetAllUsersHandler handles the retrieval of all users.
+func GetAllUsersHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		idStr := c.Param("id")
-		id, err := strconv.Atoi(idStr)
+		users, err := queries.GetAllUsers(db)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
 			return
 		}
+
+		c.JSON(http.StatusOK, gin.H{"users": users})
+	}
+}
+
+// UpdateUserHandler handles updating a user's information.
+func UpdateUserHandler(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+			return
+		}
+
 		var user models.User
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := queries.UpdateUser(db, id, user); err != nil {
+
+		if err := queries.UpdateUser(db, id, user.Name, user.Email); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": user})
+
+		c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 	}
 }
 
-func DeleteUser(db *sql.DB) gin.HandlerFunc {
+// DeleteUserHandler handles the deletion of a user.
+func DeleteUserHandler(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		idStr := c.Param("id")
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 			return
 		}
+
 		if err := queries.DeleteUser(db, id); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
 			return
 		}
+
 		c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 	}
 }

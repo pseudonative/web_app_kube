@@ -27,11 +27,11 @@ func main() {
 		c.JSON(200, gin.H{"message": "Hello World again"})
 	})
 
-	router.GET("/users/:id", handlers.GetUser(db))
-	router.GET("/users", handlers.GetUsers(db))
-	router.POST("/users", handlers.CreateUser(db))
-	router.PATCH("/users/:id", handlers.UpdateUser(db))
-	router.DELETE("/users/:id", handlers.DeleteUser(db))
+	router.GET("/users/:id", handlers.GetUserHandler(db))
+	router.GET("/users", handlers.GetAllUsersHandler(db))
+	router.POST("/users", handlers.CreateUserHandler(db))
+	router.PATCH("/users/:id", handlers.UpdateUserHandler(db))
+	router.DELETE("/users/:id", handlers.DeleteUserHandler(db))
 
 	router.Run(":8080")
 }

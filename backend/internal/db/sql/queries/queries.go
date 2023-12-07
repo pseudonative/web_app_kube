@@ -2,26 +2,25 @@ package queries
 
 import (
 	"database/sql"
-	"log"
-	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/pseudonative/web_app_kube/internal/db/sql/queries"
 	"github.com/pseudonative/web_app_kube/internal/models"
 )
 
-func CreateUser(db *sql.DB, user models.User) (int, error) {
-	var userID int
-	query := `INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id;`
-	if err := db.QueryRow(query, user.Name, user.Email).Scan(&userID); err != nil {
-		return 0, err
+// GetUserByID retrieves a user by their ID from the database.
+func GetUserByID(db *sql.DB, id int) (models.User, error) {
+	var user models.User
+	query := `SELECT id, name, email, created_at FROM users WHERE id = $1`
+	err := db.QueryRow(query, id).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt)
+	if err != nil {
+		return models.User{}, err
 	}
-	return userID, nil
+	return user, nil
 }
 
-func GetUsers(db *sql.DB) ([]models.User, error) {
+// GetAllUsers retrieves all users from the database.
+func GetAllUsers(db *sql.DB) ([]models.User, error) {
 	var users []models.User
-	query := `SELECT id, name, email, created_at FROM users;`
+	query := `SELECT id, name, email, created_at FROM users`
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -35,12 +34,26 @@ func GetUsers(db *sql.DB) ([]models.User, error) {
 		}
 		users = append(users, user)
 	}
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-	return users, nil
+
+	return users, rows.Err()
 }
 
-func GetUser(db *sql.DB, id int) (models.User, error) {
-	var user models.User
-	query := `SELECT id
+// CreateUser inserts a new user into the database.
+func CreateUser(db *sql.DB, user models.User) error {
+	query := `INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id`
+	return db.QueryRow(query, user.Name, user.Email).Scan(&user.ID)
+}
+
+// UpdateUser updates an existing user's information in the database.
+func UpdateUser(db *sql.DB, id int, name, email string) error {
+	query := `UPDATE users SET name = $1, email = $2 WHERE id = $3`
+	_, err := db.Exec(query, name, email, id)
+	return err
+}
+
+// DeleteUser removes a user from the database by their ID.
+func DeleteUser(db *sql.DB, id int) error {
+	query := `DELETE FROM users WHERE id = $1`
+	_, err := db.Exec(query, id)
+	return err
+}
