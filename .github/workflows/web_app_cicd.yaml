@@ -20,5 +20,5 @@ jobs:
              with:
                 OIDC_ROLE: ${{ secrets.OIDC_ROLE }}
                 aws_region: "us-east-1"
-
-
+                REF: ${{ github.ref_name }}
+                
