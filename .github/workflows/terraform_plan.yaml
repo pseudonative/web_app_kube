@@ -28,9 +28,8 @@ jobs:
               id: plan 
               continue-on-error: true 
               run: |
-                export ${{ secrets.RDS_PASS }}="DB_PASSWORD"
                 cd terraform/apply/production
-                echo 'db_password="$DB_PASSWORD"' > secrets.tfvars
+                echo 'db_password="${{ secrets.RDS_PASS }}"' > secrets.tfvars
                 cat secrets.tfvars
                 terraform init
                 terraform plan
