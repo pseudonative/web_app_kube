@@ -13,11 +13,9 @@ jobs:
           contents: read
           pull-requests: write
           statuses: write
-      runs-on: ubuntu-latest
-      steps:
-           - name: Plan from Composite Action
-             uses: pseudonative/reusable_work_flows/compositBranchAuthAWS@main
-             with:
-                aws_oidc_assume_role: ${{ secrets.OIDC_ROLE }}
-                aws_region: "us-east-1"
-                branch: ${{ github.ref_name }}
+      uses: pseudonative/reusable_work_flows/.github/workflows/auth_checkout_initial.yaml@main
+      with:
+        ref_branch: ${{ github.ref_name}}
+        aws_region: "us-east-1"
+      secrets:
+        OIDC_ROLE: ${{ secrets.OIDC_ROLE }}
