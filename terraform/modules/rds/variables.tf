@@ -9,11 +9,6 @@ variable "db_username" {
   type        = string
 }
 
-variable "db_password" {
-  description = "Password for the master DB user."
-  type        = string
-}
-
 variable "vpc_id" {
   description = "The VPC ID where the cluster and workers will be deployed."
   type        = string
@@ -22,4 +17,9 @@ variable "vpc_id" {
 variable "subnet_ids" {
   description = "A list of private subnet IDs to launch resources in."
   type        = list(string)
+}
+
+variable "db_password" {
+  description = "Password for the rds db"
+  type = string
 }

@@ -22,7 +22,7 @@ module "crom_rds" {
   }
 
   db_username = "subotai"
-  db_password = "thefourwinds"
+  db_password = var.db_password
   vpc_id      = module.crom_vpc.vpc_id
   subnet_ids  = module.crom_vpc.public_subnets
   db_name     = "tulsadoom"

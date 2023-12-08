@@ -33,7 +33,7 @@ jobs:
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -no-color -out=plan.tfout \
+                terraform plan -var="db_password=${{ RDS_PASS }}" -no-color -out=plan.tfout \
                 && terraform show -no-color plan.tfout
                 pwd && ls -alt
 
