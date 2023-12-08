@@ -29,15 +29,14 @@ jobs:
               continue-on-error: true 
               run: |
                 cd terraform/apply/production
-                echo 'db_password="${{ secrets.RDS_PASS }}"' > secrets.tfvars
-                cat secrets.tfvars
                 terraform init
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -var-file="secrets.tfvars" -no-color -out=plan.tfout \
+                terraform plan -var db_password=$TF_VAR_DB_PASSWORD -no-color -out=plan.tfout \
                 && terraform show -no-color plan.tfout
-                pwd && ls -alt
+              env:
+                TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }}
 
             - name: TF Plan to Github PR
               if: success() && steps.plan.conclusion == 'success'
