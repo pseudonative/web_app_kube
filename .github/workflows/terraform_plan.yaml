@@ -33,7 +33,7 @@ jobs:
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -out=plan.tfout \
+                terraform plan -var ${{ secrets.TF_VAR_DB_PASSWORD }} -out=plan.tfout \
                 && terraform show -no-color plan.tfout
 
             - name: TF Plan to Github PR
