@@ -1,4 +1,4 @@
-name: WebApp CI/CD
+name: aws auth staging 
 
 on:
     push:
