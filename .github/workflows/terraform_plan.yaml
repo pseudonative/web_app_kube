@@ -30,7 +30,8 @@ jobs:
               run: |
                 export ${{ secrets.RDS_PASS }}="DB_PASSWORD"
                 cd terraform/apply/production
-                echo 'db_password = "$DB_PASSWORD"' > secrets.tfvars
+                echo 'db_password="$DB_PASSWORD"' > secrets.tfvars
+                cat secrets.tfvars
                 terraform init
                 terraform plan
                 terraform fmt -check
