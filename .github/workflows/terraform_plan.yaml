@@ -33,7 +33,7 @@ jobs:
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -var -out=plan.tfout \
+                terraform plan -out=plan.tfout \
                 && terraform show -no-color plan.tfout
 
             - name: TF Plan to Github PR
