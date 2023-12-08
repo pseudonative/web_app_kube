@@ -33,10 +33,8 @@ jobs:
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -var "db_password=$TF_VAR_DB_PASSWORD" -no-color -out=plan.tfout \
+                terraform plan -var -out=plan.tfout \
                 && terraform show -no-color plan.tfout
-              env:
-                TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }}
 
             - name: TF Plan to Github PR
               if: success() && steps.plan.conclusion == 'success'
