@@ -25,7 +25,7 @@ The project uses Terraform for infrastructure as code to provision and manage AW
 
 ## Workflows
 
-### 1. WebApp CI/CD (`web_app_cicd.yaml`)
+### 1. WebApp CI/CD (`aws_auth_staging.yaml`)
 
 Triggered on pushes and pull requests to `staging-**` branches. It includes steps for setting AWS credentials, checking out the code, and preparing the build.
 
