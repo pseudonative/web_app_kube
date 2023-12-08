@@ -18,7 +18,6 @@ jobs:
            - name: Plan from Composite Action
              uses: pseudonative/reusable_work_flows/compositBranchAuthAWS@main
              with:
-                OIDC_ROLE: ${{ secrets.OIDC_ROLE }}
+                aws_oidc_assume_role: ${{ secrets.OIDC_ROLE }}
                 aws_region: "us-east-1"
-                REF: ${{ github.ref_name }}
-                
+                branch: ${{ github.ref_name }}
