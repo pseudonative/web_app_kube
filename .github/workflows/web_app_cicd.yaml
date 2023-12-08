@@ -16,4 +16,5 @@ jobs:
       uses: pseudonative/reusable_work_flows/.github/workflows/auth_checkout_initial.yaml@main
       with:
         aws_region: 'us-east-1'
-        aws_oidc_assume_role: arn:aws:iam::520291287938:role/crom-github-actions-role
+      secrets:
+        aws_oidc_assume_role: ${{ secrets.OIDC_ROLE }}
