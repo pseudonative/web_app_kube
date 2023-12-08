@@ -27,6 +27,8 @@ jobs:
             - name: Terraform init - plan
               id: plan 
               continue-on-error: true 
+              env:
+                db_password: ${{ secrets.RDS_PASS }}
               run: |
                 
                 cd terraform/apply/production
