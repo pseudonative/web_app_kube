@@ -27,6 +27,8 @@ jobs:
             - name: Terraform init - plan
               id: plan 
               continue-on-error: true 
+              env:
+                db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
               run: |
                 
                 cd terraform/apply/production
@@ -34,7 +36,7 @@ jobs:
                 terraform plan
                 terraform fmt -check
                 terraform validate -no-color
-                terraform plan -var="db_password=${{ secrets.RDS_PASS }}" -no-color -out=plan.tfout \
+                terraform plan -var="db_password=${{ secrets.TF_VAR_DB_PASSWORD }}" -no-color -out=plan.tfout \
                 && terraform show -no-color plan.tfout
                 pwd && ls -alt
 
