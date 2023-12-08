@@ -33,3 +33,4 @@ resource "aws_security_group" "db_sg" {
     cidr_blocks = ["73.78.80.250/32"]
   }
 }
+
